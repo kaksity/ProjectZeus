@@ -3,11 +3,13 @@
    "version": "0.0.1",
    "description": "Awesome project developed with TypeORM.",
    "devDependencies": {
+      "@types/dotenv": "^8.2.0",
       "@types/node": "^8.0.29",
       "ts-node": "3.3.0",
       "typescript": "3.3.3333"
    },
    "dependencies": {
+      "dotenv": "^16.0.1",
       "inversify": "^6.0.1",
       "inversify-express-utils": "^6.4.3",
       "mysql": "^2.14.1",
@@ -16,6 +18,7 @@
    },
    "scripts": {
       "start": "ts-node src/index.ts",
+      "dev": "nodemon --exec ts-node src/index.ts",
       "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js"
    }
 }
