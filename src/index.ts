@@ -4,10 +4,10 @@ import { Container } from "inversify";
 import "reflect-metadata";
 import ormconfig from "./app/database/ormconfig.config";
 import { ExpressApplication } from "./app";
-
+import InversifyContainer from './app/di-container'
 async function bootStrap()
 {
-    const application = new ExpressApplication(new Container());
+    const application = new ExpressApplication(InversifyContainer);
     const appPort = process.env.APP_PORT;
     const applicationInstance = application.getApplicationInstance();
     try
