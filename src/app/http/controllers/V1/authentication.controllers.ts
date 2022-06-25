@@ -3,20 +3,20 @@ import { Request, Response } from "express";
 import { controller, httpGet, httpPost, request, response } from "inversify-express-utils";
 import { HttpException } from "../../exceptions";
 import { TYPES } from "../../../constants";
-import { AuthenticationService, UtilityService } from "../../../services";
+import { UserService, UtilityService } from "../../../services";
 import { UserEntity } from "../../../database/entity";
 import { IResponse } from '../../resources';
 @controller('/api/v1/auth')
 export class AuthenticationController{
 
-    private authenticationService: AuthenticationService;
+    private userService: UserService;
     private utilityService: UtilityService;
 
     constructor(
         @inject(TYPES.UtilityService) utilityService: UtilityService,
-        @inject(TYPES.AuthenticationService) authenticationService: AuthenticationService
+        @inject(TYPES.UserService) userService: UserService
     ) {
-        this.authenticationService = authenticationService;
+        this.userService = userService;
         this.utilityService = utilityService;
     }
 
@@ -28,7 +28,7 @@ export class AuthenticationController{
         if(req.body.emailAddress)
         {
             // Check if the email was used to login the user
-            user = await this.authenticationService.getUserByEmailAddress(req.body.emailAddress);
+            user = await this.userService.getUserByEmailAddress(req.body.emailAddress);
             if(user == null)
             {
                 throw new HttpException('Invalid log in credentials', 400);
@@ -37,7 +37,7 @@ export class AuthenticationController{
         else if(req.body.phoneNumber)
         {
             // Check if the phone number was used to login the user
-            user = await this.authenticationService.getUserByPhoneNumber(req.body.phoneNumber);
+            user = await this.userService.getUserByPhoneNumber(req.body.phoneNumber);
             if(user == null)
             {
                 throw new HttpException('Invalid log in credentials', 400);
@@ -77,20 +77,20 @@ export class AuthenticationController{
         let user: UserEntity = null;
         // Check if the email has already been registered
         
-        user = await this.authenticationService.getUserByEmailAddress(req.body.emailAddress);
+        user = await this.userService.getUserByEmailAddress(req.body.emailAddress);
         if(user != null)
         {
             throw new HttpException('This email address has already been taken', 400);
         }
         
         // Check if the phone number has already been registered
-        user = await this.authenticationService.getUserByPhoneNumber(req.body.phoneNumber);
+        user = await this.userService.getUserByPhoneNumber(req.body.phoneNumber);
         if(user != null)
         {
             throw new HttpException('This phone number has already been taken', 400);
         }
 
-        await this.authenticationService.createNewUser(req.body);
+        await this.userService.createNewUser(req.body);
 
         const response: IResponse = {
             statusCode: 201,

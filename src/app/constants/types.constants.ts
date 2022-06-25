@@ -1,4 +1,6 @@
 export const TYPES = {
-    AuthenticationService: Symbol.for('AuthenticationService'),
-    UtilityService: Symbol.for('UtilityService')
+    UserService: Symbol.for('AuthenticationService'),
+    UtilityService: Symbol.for('UtilityService'),
+    AuthenticationMiddleware: Symbol.for('AuthenticationMiddleware'),
+    WalletService: Symbol.for('WalletService')
 }

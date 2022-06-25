@@ -1,6 +1,6 @@
 import { hash, compare } from "bcryptjs";
 import { injectable } from "inversify";
-import { sign } from "jsonwebtoken";
+import { sign, verify } from "jsonwebtoken";
 
 @injectable()
 export class UtilityService
@@ -21,5 +21,9 @@ export class UtilityService
         return sign(user,process.env.JWT_TOKEN_SECRET, {
             expiresIn: '1H',
         });
+    }
+    public decodeJWTToken(token: string)
+    {
+        return verify(token, process.env.JWT_TOKEN_SECRET);
     }
 }

@@ -4,7 +4,7 @@ import { UserEntity } from "../database/entity";
 import { UtilityService } from "./utility.service";
 
 @injectable()
-export class AuthenticationService
+export class UserService
 {
     private utilityService: UtilityService;
 
@@ -15,6 +15,15 @@ export class AuthenticationService
         this.utilityService = utilityService;
     }
     
+    public async getUserById(id: string): Promise<UserEntity | null>
+    {
+        const user = await UserEntity.findOne({
+            where:{
+                id
+            }
+        });
+        return user;
+    }
     public async getUserByEmailAddress(emailAddress:string): Promise<UserEntity | null>
     {
         const user = await UserEntity.findOne({
