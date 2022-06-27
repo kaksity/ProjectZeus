@@ -2,21 +2,21 @@ import { Response } from "express";
 import { inject } from "inversify";
 import { controller, httpDelete, httpPost, request, response } from "inversify-express-utils";
 import { TYPES } from "../../../constants";
-import { WalletService } from "../../../services/wallet.service";
+import { UserWalletService } from "../../../services/user.wallet.service";
 import { HttpException } from "../../exceptions";
 import { AuthenticatedRequest } from "../../requests/authentication";
 import { IResponse } from "../../resources";
 
-@controller('/api/v1/wallets')
-export class WalletController
+@controller('/api/v1/my/wallets')
+export class UserWalletController
 {
 
-    private walletService: WalletService;
+    private userWalletService: UserWalletService;
     /**
      *
      */
-    constructor(@inject(TYPES.WalletService) walletService: WalletService) {
-        this.walletService = walletService;
+    constructor(@inject(TYPES.UserWalletService) userWalletService: UserWalletService) {
+        this.userWalletService = userWalletService;
     }
 
     
@@ -25,7 +25,7 @@ export class WalletController
     public async store(@request() req: AuthenticatedRequest, @response() res: Response)
     {
         const user = req.user;
-        await this.walletService.createWallet(req.body, user);
+        await this.userWalletService.createWallet(req.body, user);
         
         const response: IResponse = {
             statusCode: 201,
@@ -37,14 +37,14 @@ export class WalletController
     @httpDelete('/:id', TYPES.AuthenticationMiddleware)
     public async destroy(@request() req: AuthenticatedRequest, @response() res: Response)
     {
-        const wallet = await this.walletService.getWalletById(req.params.id);
+        const wallet = await this.userWalletService.getWalletById(req.params.id);
         
         if(wallet == null)
         {
             throw new HttpException('Wallet does not exist', 404);
         }
 
-        await this.walletService.deleteWallet(wallet);
+        await this.userWalletService.deleteWallet(wallet);
 
         const response: IResponse = {
             statusCode: 200,

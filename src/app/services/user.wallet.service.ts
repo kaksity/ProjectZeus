@@ -3,7 +3,7 @@ import { UserEntity } from "../database/entity";
 import { WalletEntity } from "../database/entity/wallet.entity";
 
 @injectable()
-export class WalletService
+export class UserWalletService
 {
     public async createWallet({ name }, user: UserEntity): Promise<void>
     {
