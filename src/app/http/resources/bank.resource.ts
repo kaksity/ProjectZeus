@@ -11,10 +11,8 @@ interface IData {
 
 export class BankResource
 {
-    constructor(bank: BankEntity) {
-        this.map(bank);
-    }
-    private map(bank: BankEntity)
+
+    public static single(bank: BankEntity)
     {
         
         const data: IData = {

@@ -29,6 +29,20 @@ export class UserWalletService
             }
         });
     }
+    public async getUserWalletById(id: string, user: UserEntity): Promise<WalletEntity>
+    {
+        return await WalletEntity.findOne({
+            where:{
+                id,
+                user
+            }
+        });
+    }
+    
+    public async updateWallet(wallet: WalletEntity): Promise<void>
+    {
+        await wallet.save();
+    }
 
     public async deleteWallet(wallet: WalletEntity): Promise<void>
     {
