@@ -1,11 +1,12 @@
 import { Response } from "express";
 import { inject } from "inversify";
-import { controller, httpDelete, httpPost, request, response } from "inversify-express-utils";
+import { controller, httpDelete, httpGet, httpPost, request, response } from "inversify-express-utils";
 import { TYPES } from "../../../constants";
 import { UserWalletService } from "../../../services/user.wallet.service";
 import { HttpException } from "../../exceptions";
 import { AuthenticatedRequest } from "../../requests/authentication";
 import { IResponse } from "../../resources";
+import { UserWalletResource } from "../../resources/user.wallet.resource";
 
 @controller('/api/v1/my/wallets')
 export class UserWalletController
@@ -19,7 +20,13 @@ export class UserWalletController
         this.userWalletService = userWalletService;
     }
 
-    
+    @httpGet('/', TYPES.AuthenticationMiddleware)
+    public async index(@request() req: AuthenticatedRequest, @response() res: Response)
+    {
+        const user = req.user;
+        const wallets = await this.userWalletService.getAllUserWallet(user);
+        return UserWalletResource.collection(wallets);
+    }
 
     @httpPost('/', TYPES.AuthenticationMiddleware)
     public async store(@request() req: AuthenticatedRequest, @response() res: Response)

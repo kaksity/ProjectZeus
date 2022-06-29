@@ -5,6 +5,7 @@ import { TYPES } from "../../../constants";
 import { BankService } from "../../../services/bank.service";
 import { HttpException } from "../../exceptions";
 import { IResponse } from "../../resources";
+import { BankResource } from "../../resources/bank.resource";
 
 @controller('/api/v1/general-settings/banks')
 export class BankController
@@ -20,7 +21,8 @@ export class BankController
     @httpGet('/')
     public async index(@request() req: Request, @response() res: Response)
     {
-        return this.bankService.getAllBanks();
+        const banks = await this.bankService.getAllBanks();
+        return BankResource.collection(banks);
     }
 
     @httpPost('/')

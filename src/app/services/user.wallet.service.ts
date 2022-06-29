@@ -12,7 +12,15 @@ export class UserWalletService
             user
         });
     }
-
+    public async getAllUserWallet(user: UserEntity): Promise<WalletEntity[]>
+    {
+        const wallets = await WalletEntity.find({
+            where:{
+                user
+            }
+        });
+        return wallets;
+    }
     public async getWalletById(id: string): Promise<WalletEntity>
     {
         return await WalletEntity.findOne({
