@@ -6,6 +6,7 @@ import { UserWalletService } from "../../../services";
 import { TransferService } from "../../../services/transfer.service";
 import { HttpException } from "../../exceptions";
 import { AuthenticatedRequest } from "../../requests/authentication";
+import { IResponse } from "../../resources";
 
 @controller('/api/v1/my/transfers')
 export class TransferController
@@ -28,8 +29,17 @@ export class TransferController
     {
         const user = req.user;
         const amount = req.body.amount as number;
+        let senderWallet = null;
+        let receiverWallet = null;
 
-        const senderWallet = await this.userWalletService.getUserWalletById(req.body.senderWalletId, user);
+        if(req.body.senderWalletId)
+        {
+            senderWallet = await this.userWalletService.getUserWalletById(req.body.senderWalletId, user);
+        }
+        else if (req.body.senderWalletCode)
+        {
+            senderWallet = await this.userWalletService.getWalletByWalletCode(req.body.senderWalletCode);
+        }
         
         // Check if the sender wallet exist
         if(senderWallet == null)
@@ -37,8 +47,17 @@ export class TransferController
             throw new HttpException('Sender wallet does not exist', 400);
         }
 
+        
+        if(req.body.receiverWalletId)
+        {
+            receiverWallet = await this.userWalletService.getWalletById(req.body.receiverWalletId);
+        }
+        if(req.body.receiverWalletCode)
+        {
+            receiverWallet = await this.userWalletService.getWalletByWalletCode(req.body.receiverWalletCode);
+        }
+
         // Check if the receiver wallet exist
-        const receiverWallet = await this.userWalletService.getWalletById(req.body.receiverWalletId);
         if(receiverWallet == null)
         {
             throw new HttpException('Receiver wallet does not exist', 400);
@@ -56,5 +75,11 @@ export class TransferController
 
         await this.transferService.transfer(senderWallet, receiverWallet, amount);
 
+        const response: IResponse =  {
+            statusCode: 201,
+            message: 'Transfer was successfully done'
+        }
+
+        return res.status(response.statusCode).json(response);
     }
 }

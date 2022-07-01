@@ -26,4 +26,17 @@ export class UtilityService
     {
         return verify(token, process.env.JWT_TOKEN_SECRET);
     }
+
+    public generateRandomString(length: number = 8)
+    {
+        let string = 'qwertyuioplkjhgfdsazxcvbnm1234567890QWERTYUIOPLKJHGFDSASZXCVBNM';
+        let result = '';
+        
+        for(let i = 0; i < length; i++)
+        {
+           result += string.charAt(Math.floor(Math.random() * string.length))
+        }
+
+        return result;
+    }
 }

@@ -1,7 +1,8 @@
 import { injectable } from "inversify";
 import { UserEntity } from "../database/entity";
+import { WalletCodeEntity } from "../database/entity/wallet.code.entity";
 import { WalletEntity } from "../database/entity/wallet.entity";
-
+import { addDays }  from "date-and-time";
 @injectable()
 export class UserWalletService
 {
@@ -12,6 +13,26 @@ export class UserWalletService
             user
         });
     }
+    public async createWalletCode(code: string, wallet: WalletEntity): Promise<WalletCodeEntity>
+    {
+        const now = new Date();
+
+        const walletCode = await WalletCodeEntity.create({
+            wallet,
+            code,
+            expiresAt: addDays(now, 7)
+        }).save();
+        
+        return walletCode;
+    }
+    public async getWalletCodes(wallet: WalletEntity): Promise<WalletCodeEntity[]>
+    {
+        return await WalletCodeEntity.find({
+            where: {
+                wallet
+            }
+        });
+    }
     public async getAllUserWallet(user: UserEntity): Promise<WalletEntity[]>
     {
         const wallets = await WalletEntity.find({
@@ -20,6 +41,25 @@ export class UserWalletService
             }
         });
         return wallets;
+    }
+    public async getWalletCodeByCode(walletCode: string): Promise<WalletCodeEntity>
+    {
+        return await WalletCodeEntity.findOne({
+            where:{
+                code: walletCode,
+                // To Narrow the Wallet Code, Add the condition to check if the wallet code has expired or not
+            }
+        });
+    }
+    public async getWalletByWalletCode(walletCode: string): Promise<WalletEntity>
+    {
+        const walletCodeEntity = await WalletCodeEntity.findOne({
+            relations:['wallet'],
+            where:{
+                code: walletCode
+            }
+        });
+        return walletCodeEntity.wallet;
     }
     public async getWalletById(id: string): Promise<WalletEntity>
     {

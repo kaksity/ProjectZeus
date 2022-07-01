@@ -2,6 +2,7 @@ import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 import { GenericEntity } from "./generic.entity";
 import { TransferEntity } from "./transfer.entity";
 import { UserEntity } from "./user.entity";
+import { WalletCodeEntity } from "./wallet.code.entity";
 
 @Entity('wallets')
 export class WalletEntity extends GenericEntity
@@ -20,4 +21,7 @@ export class WalletEntity extends GenericEntity
 
     @OneToMany(() => TransferEntity, (transfers) => transfers.receiverWallet)
     receivedTransfers?: TransferEntity[];
+
+    @OneToMany(() => WalletCodeEntity, (walletCode) => walletCode.wallet)
+    walletCodes: WalletCodeEntity[];
 }
