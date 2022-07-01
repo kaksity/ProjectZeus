@@ -82,4 +82,4 @@ export class TransferController
 
         return res.status(response.statusCode).json(response);
     }
-}
+} 
