@@ -22,7 +22,14 @@ export class BankController
     public async index(@request() req: Request, @response() res: Response)
     {
         const banks = await this.bankService.getAllBanks();
-        return BankResource.collection(banks);
+        
+        const response: IResponse = {
+            message: 'Retrieved list of banks',
+            statusCode: 200,
+            data: BankResource.collection(banks)
+        };
+        return res.status(response.statusCode).json(response);
+        
     }
 
     @httpPost('/')
