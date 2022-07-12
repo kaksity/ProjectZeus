@@ -3,6 +3,7 @@ import { TYPES } from "./constants";
 import { AuthenticationMiddleware } from "./http/middlewares";
 import { UserBankService, UserService, UtilityService } from "./services";
 import { BankService } from "./services/bank.service";
+import { PaystackService } from "./services/paystack.service";
 import { TransferService } from "./services/transfer.service";
 import { UserWalletService } from "./services/user.wallet.service";
 
@@ -15,5 +16,6 @@ InversifyContainer.bind<UserWalletService>(TYPES.UserWalletService).to(UserWalle
 InversifyContainer.bind<BankService>(TYPES.BankService).to(BankService);
 InversifyContainer.bind<UserBankService>(TYPES.UserBankService).to(UserBankService);
 InversifyContainer.bind<TransferService>(TYPES.TransferService).to(TransferService);
+InversifyContainer.bind<PaystackService>(TYPES.PaystackService).to(PaystackService);
 
 export default InversifyContainer;

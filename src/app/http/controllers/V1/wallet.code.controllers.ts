@@ -5,7 +5,7 @@ import { TYPES } from "../../../constants";
 import { UserWalletService, UtilityService } from "../../../services";
 import { HttpException } from "../../exceptions";
 import { AuthenticatedRequest } from "../../requests/authentication";
-import { WalletCodeResource } from "../../resources";
+import { IResponse, WalletCodeResource } from "../../resources";
 
 @controller('/api/v1/my/wallets')
 export class WalletCodeController
@@ -34,7 +34,14 @@ export class WalletCodeController
         }
         
         const walletCodes = await this.userWalletService.getWalletCodes(wallet);
-        return WalletCodeResource.collection(walletCodes);
+        const response: IResponse = {
+            message: 'Retrived list of wallet codes',
+            statusCode: 200,
+            data: WalletCodeResource.collection(walletCodes)
+        }
+
+        return res.status(response.statusCode).json(response);
+
     }
     
     @httpPost('/:walletId/codes', TYPES.AuthenticationMiddleware)
@@ -53,8 +60,11 @@ export class WalletCodeController
         
         const walletCode = await this.userWalletService.createWalletCode(code, wallet);
         
-        return WalletCodeResource.single(walletCode);
-    }
-
-    
+        const response: IResponse = {
+            message: 'Retrived newly created wallet code',
+            statusCode: 200,
+            data: WalletCodeResource.single(walletCode)
+        }
+        return res.status(response.statusCode).json(response);
+    }   
 }

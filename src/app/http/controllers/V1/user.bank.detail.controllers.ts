@@ -28,8 +28,12 @@ export class UserBankDetailController
         const user = req.user;
 
         const userBanks = await this.userBankService.getUserBanks(user);
-        
-        return UserBankResource.collection(userBanks);
+        const response: IResponse = {
+            message: 'Retrieved list of user banks',
+            statusCode: 200,
+            data: UserBankResource.collection(userBanks)
+        };
+        return res.status(response.statusCode).json(response);
     }
 
     @httpPost('/', TYPES.AuthenticationMiddleware)
