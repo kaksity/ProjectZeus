@@ -25,7 +25,13 @@ export class UserWalletController
     {
         const user = req.user;
         const wallets = await this.userWalletService.getAllUserWallet(user);
-        return UserWalletResource.collection(wallets);
+        const response: IResponse = {
+            message: 'Retrieved list of user wallets',
+            statusCode: 200,
+            data: UserWalletResource.collection(wallets),
+        }
+
+        return res.status(response.statusCode).json(response);
     }
 
     @httpPost('/', TYPES.AuthenticationMiddleware)

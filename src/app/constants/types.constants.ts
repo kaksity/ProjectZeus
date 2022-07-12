@@ -6,4 +6,5 @@ export const TYPES = {
     BankService: Symbol.for('BankService'),
     UserBankService: Symbol.for('UserBankService'),
     TransferService: Symbol.for('TransferService'),
+    PaystackService: Symbol.for('PaystackService')
 }
